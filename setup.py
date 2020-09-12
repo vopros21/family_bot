@@ -1,4 +1,7 @@
 import os
+import json
+import requests
+import time
 
 import telebot
 
@@ -22,6 +25,32 @@ def get_user_step(uid):
     else:
         user_steps[uid] += 1
     return user_steps[uid]
+
+
+# TODO: Move quotes engine to different file
+def get_quote():
+    params = {
+        'method': 'getQuote',
+        'lang': 'en',
+        'format': 'json'
+    }
+    res = requests.get('http://api.forismatic.com/api/1.0/', params)
+    json_text = json.loads(res.text)
+    return json_text["quoteText"], json_text["quoteAuthor"]
+
+
+while True:
+    try:
+        quote, author = get_quote()
+        status = quote+" -"+author+"\n"+"#python \
+        #dailypython #twitterbot #pythonquotes #programming"
+        print('\nUpdating : ', status)
+        # api.update_status(status=status)
+        print("\nGoing to Sleep for 1 min")
+        time.sleep(60)
+    except Exception as ex:
+        print(ex)
+        break
 
 
 @bot.message_handler(commands=['start'])
