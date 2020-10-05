@@ -1,7 +1,5 @@
 import os
-import json
-import requests
-import time
+import quote_engine as qe
 
 import telebot
 
@@ -14,7 +12,8 @@ known_users = []
 user_steps = {}
 commands = {
     'help': 'How to use the bot',
-    'start': 'The most useful functionality'
+    'start': 'The most useful functionality',
+    'quote': 'Get a new smart quote'
 }
 
 
@@ -27,37 +26,27 @@ def get_user_step(uid):
     return user_steps[uid]
 
 
-# TODO: Move quotes engine to different file
-def get_quote():
-    params = {
-        'method': 'getQuote',
-        'lang': 'en',
-        'format': 'json'
-    }
-    res = requests.get('http://api.forismatic.com/api/1.0/', params)
-    json_text = json.loads(res.text)
-    return json_text["quoteText"], json_text["quoteAuthor"]
-
-
-while True:
-    try:
-        quote, author = get_quote()
-        status = quote+" -"+author+"\n"+"#python \
-        #dailypython #twitterbot #pythonquotes #programming"
-        print('\nUpdating : ', status)
-        # api.update_status(status=status)
-        print("\nGoing to Sleep for 1 min")
-        time.sleep(60)
-    except Exception as ex:
-        print(ex)
-        break
-
-
 @bot.message_handler(commands=['start'])
 def command_start_handler(message):
     cid = message.chat.id
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     bot.send_message(cid, 'Hello, user. I\'m glad to see you', reply_markup=markup)
+
+
+@bot.message_handler(commands=['quote'])
+def command_quote_handler(message):
+    cid = message.chat.id
+    quote, author = 'Quote', 'Author'
+    status = quote + " -" + author + "\n"
+    try:
+        quote, author = qe.get_quote('ru')
+        quote = '<b>' + quote + '</b>'
+        author = '<i>' + author + '</i>'
+        status = quote + "\n" + author
+    except Exception as ex:
+        print(ex)
+    print(cid)
+    bot.send_message(cid, status, parse_mode='HTML')
 
 
 if __name__ == '__main__':
