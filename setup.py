@@ -13,10 +13,12 @@ user_steps = {}
 commands = {
     'help': 'How to use the bot',
     'start': 'The most useful functionality',
-    'quote': 'Get a new smart quote'
+    'quote': 'Get a new smart quote',
+    'portfolio': 'Get portfolio statistics'
 }
 
 
+# TODO: add saving statistics to file
 def get_user_step(uid):
     if uid not in user_steps:
         known_users.append(uid)
@@ -24,6 +26,13 @@ def get_user_step(uid):
     else:
         user_steps[uid] += 1
     return user_steps[uid]
+
+
+@bot.message_handler(commands=['help'])
+def command_help_handler(message):
+    cid = message.chat.id
+    markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    bot.send_message(cid, 'This is a help message!', reply_markup=markup)
 
 
 @bot.message_handler(commands=['start'])
@@ -46,7 +55,29 @@ def command_quote_handler(message):
     except Exception as ex:
         print(ex)
     print(cid)
+    print(message)
     bot.send_message(cid, status, parse_mode='HTML')
+
+
+@bot.message_handler(commands=['portfolio'])
+def command_portfolio_handler(message):
+    cid = message.chat.id
+    markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    bot.send_message(cid, 'Here will be your portfolio statistics.', reply_markup=markup)
+
+
+def morning_message():
+    gid = -449881048
+    quote, author = 'Quote', 'Author'
+    status = quote + " -" + author + "\n"
+    try:
+        quote, author = qe.get_quote('ru')
+        quote = '<b>' + quote + '</b>'
+        author = '<i>' + author + '</i>'
+        status = quote + "\n" + author
+    except Exception as ex:
+        print(ex)
+    bot.send_message(gid, status, parse_mode='HTML')
 
 
 if __name__ == '__main__':
