@@ -1,5 +1,6 @@
 import os
 import quote_engine as qe
+import portfolio_engine as pe
 
 import telebot
 
@@ -59,11 +60,15 @@ def command_quote_handler(message):
     bot.send_message(cid, status, parse_mode='HTML')
 
 
-@bot.message_handler(commands=['portfolio'])
+# @bot.message_handler(commands=['portfolio'])
+@bot.message_handler(regexp='^.portfolio')
 def command_portfolio_handler(message):
     cid = message.chat.id
+    _, *symbols = message.text.split()
+    print(symbols)
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    bot.send_message(cid, 'Here will be your portfolio statistics.', reply_markup=markup)
+    plvalue = pe.get_plvalue(symbols[0].upper(), 116.03, 1, '2020-10-09')
+    bot.send_message(cid, f"This is your profit/loss so far: {format(plvalue, '.2f')}", reply_markup=markup)
 
 
 def morning_message():
