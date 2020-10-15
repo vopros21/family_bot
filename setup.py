@@ -13,9 +13,9 @@ known_users = []
 user_steps = {}
 commands = {
     'help': 'How to use the bot',
-    'start': 'The most useful functionality',
+    'portfolio': 'Get portfolio statistics',
     'quote': 'Get a new smart quote',
-    'portfolio': 'Get portfolio statistics'
+    'start': 'The most useful functionality'
 }
 
 
@@ -60,7 +60,6 @@ def command_quote_handler(message):
     bot.send_message(cid, status, parse_mode='HTML')
 
 
-# @bot.message_handler(commands=['portfolio'])
 @bot.message_handler(regexp='^.portfolio')
 def command_portfolio_handler(message):
     cid = message.chat.id

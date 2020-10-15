@@ -1,0 +1,4 @@
+requests==2.24.0
+pytelegrambotapi==3.7.2
+yfinance==0.1.55
+telebot==0.0.3
