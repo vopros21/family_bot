@@ -15,10 +15,10 @@ def get_plvalue(stock, price, number, start_date):
     return number * (close_prices[-1] - price)
 
 
-def newone():
-    close_prices = get_close_prices('AAPL', '2020-10-09')
-    print(close_prices)
-    print(f"Profit/Loss value: {get_plvalue('AAPL', 116.03, 1, '2020-10-09')}")
+# def newone():
+#     close_prices = get_close_prices('AAPL', '2020-10-09')
+#     print(close_prices)
+#     print(f"Profit/Loss value: {get_plvalue('AAPL', 116.03, 1, '2020-10-09')}")
 
 
 if __name__ == '__main__':
