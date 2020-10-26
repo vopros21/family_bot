@@ -14,21 +14,24 @@ def get_close_price(stock):
 
 
 def get_plvalue(stock):
-    current_price = int(get_close_price(stock))
+    current_price = float(get_close_price(stock))
     buying_price, quantity = average_price(stock)
     return quantity * (current_price - float(buying_price))
 
 
 def average_price(stock):
+    total_number = 0
+    total_spending = 0
     with open('data/portfolio.csv', 'r', encoding='UTF-8') as file:
         for line in file.readlines():
             current_stock, date, price, number = line.split(',')
-            total_number = 0
-            total_spending = 0
             if current_stock.lower() == stock.lower():
                 total_number += int(number)
                 total_spending += float(price)
-    return total_spending / total_number, total_number
+    if total_number > 0:
+        return total_spending / total_number, total_number
+    else:
+        return 0, 0
 
 
 def newone():

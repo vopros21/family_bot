@@ -66,7 +66,10 @@ def command_portfolio_handler(message):
     _, *symbols = message.text.split()
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     plvalue = pe.get_plvalue(symbols[0].upper())
-    bot.send_message(cid, f"This is your profit/loss so far: {format(plvalue, '.2f')}", reply_markup=markup)
+    if plvalue != 0:
+        bot.send_message(cid, f"This is your profit/loss so far: {format(plvalue, '.2f')}", reply_markup=markup)
+    else:
+        bot.send_message(cid, 'Sorry. You don\'t have this instrument in your portfolio.', reply_markup=markup)
 
 
 def morning_message():
