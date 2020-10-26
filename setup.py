@@ -64,9 +64,8 @@ def command_quote_handler(message):
 def command_portfolio_handler(message):
     cid = message.chat.id
     _, *symbols = message.text.split()
-    print(symbols)
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    plvalue = pe.get_plvalue(symbols[0].upper(), 116.03, 1, '2020-10-09')
+    plvalue = pe.get_plvalue(symbols[0].upper())
     bot.send_message(cid, f"This is your profit/loss so far: {format(plvalue, '.2f')}", reply_markup=markup)
 
 
