@@ -65,6 +65,11 @@ def command_portfolio_handler(message):
     cid = message.chat.id
     _, *symbols = message.text.split()
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+
+    with open('data/portfolio.csv', 'r', encoding='UTF-8') as file:
+        for line in file.readlines():
+            print(line)
+
     plvalue = pe.get_plvalue(symbols[0].upper())
     if plvalue != 0:
         bot.send_message(cid, f"This is your profit/loss so far: {format(plvalue, '.2f')}", reply_markup=markup)

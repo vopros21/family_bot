@@ -22,6 +22,7 @@ def get_plvalue(stock):
 def average_price(stock):
     total_number = 0
     total_spending = 0
+    # with open('/Users/mkostenko/PycharmProjects/family_bot/data/portfolio.csv', 'r', encoding='UTF-8') as file:
     with open('data/portfolio.csv', 'r', encoding='UTF-8') as file:
         for line in file.readlines():
             current_stock, date, price, number = line.split(',')
