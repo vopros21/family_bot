@@ -43,6 +43,7 @@ def command_start_handler(message):
     bot.send_message(cid, 'Hello, user. I\'m glad to see you', reply_markup=markup)
 
 
+# TODO: add possibility to chose the quote language
 @bot.message_handler(commands=['quote'])
 def command_quote_handler(message):
     cid = message.chat.id
