@@ -19,10 +19,10 @@ def get_plvalue(stock):
     return quantity * (current_price - float(buying_price))
 
 
+# TODO: change function for using different data files
 def average_price(stock):
     total_number = 0
     total_spending = 0
-    # with open('/Users/mkostenko/PycharmProjects/family_bot/data/portfolio.csv', 'r', encoding='UTF-8') as file:
     with open('data/portfolio.csv', 'r', encoding='UTF-8') as file:
         for line in file.readlines():
             current_stock, date, price, number = line.split(',')
@@ -35,14 +35,6 @@ def average_price(stock):
         return 0, 0
 
 
-def newone():
-    pass
-#     close_prices = get_close_prices('AAPL', '2020-10-09')
-#     print(close_prices)
-#     print(f"Profit/Loss value: {get_plvalue('AAPL', 116.03, 1, '2020-10-09')}")
-
-
 if __name__ == '__main__':
-    # newone()
     print(average_price('aapl'))
     print(get_plvalue('aapl'))
