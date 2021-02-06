@@ -5,7 +5,7 @@ import portfolio_engine as pe
 class TestAveragePrice(unittest.TestCase):
     def test_stock_not_in_portfolio(self):
         """Test if someone tries to get a stock which is not presented in the portfolio"""
-        query_result = pe.average_price('BUG')
+        query_result = pe.average_price('BUG', 'test_portfolio.csv')
         self.assertEqual((0, 0), query_result, 'Stock BUG was found in the portfolio.')
 
     def test_stock_in_portfolio(self):
@@ -13,7 +13,7 @@ class TestAveragePrice(unittest.TestCase):
         stock_price = 20
         quantity = 5
         expected_result = (stock_price, quantity)
-        query_result = pe.average_price('TEST')
+        query_result = pe.average_price('TEST', 'test_portfolio.csv')
         self.assertEqual(expected_result, query_result, 'Wrong price for stock in portfolio')
 
     def test_multiple_stock_in_portfolio(self):
@@ -21,7 +21,7 @@ class TestAveragePrice(unittest.TestCase):
         stock_price = 20
         quantity = 6
         expected_result = (stock_price, quantity)
-        query_result = pe.average_price('TEST2')
+        query_result = pe.average_price('TEST2', 'test_portfolio.csv')
         self.assertEqual(expected_result, query_result, 'Wrong price for stock in portfolio')
 
 

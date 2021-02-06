@@ -13,26 +13,37 @@ def get_close_price(stock):
     return get_close_prices(stock)[-1]
 
 
+# TODO: add function for getting profit/loss for all stock in the portfolio
+def get_total_plvalue():
+    pass
+
+
 def get_plvalue(stock):
     current_price = float(get_close_price(stock))
     buying_price, quantity = average_price(stock)
     return quantity * (current_price - float(buying_price))
 
 
-# TODO: change function for using different data files
-def average_price(stock):
-    total_number = 0
-    total_spending = 0
-    with open('data/portfolio.csv', 'r', encoding='UTF-8') as file:
-        for line in file.readlines():
-            current_stock, date, price, number = line.split(',')
-            if current_stock.lower() == stock.lower():
-                total_number += int(number)
-                total_spending += float(price)
-    if total_number > 0:
+def average_price(stock, filename='portfolio.csv'):
+    portfolio_dict = read_portfolio(filename)
+    if stock in portfolio_dict.keys():
+        total_number = portfolio_dict[stock][1]
+        total_spending = portfolio_dict[stock][0]
         return total_spending / total_number, total_number
     else:
         return 0, 0
+
+
+# read the whole portfolio into a dictionary
+def read_portfolio(filename):
+    portfolio_dict = {}
+    with open(f'data/{filename}', 'r', encoding='UTF-8') as file:
+        for line in file.readlines():
+            current_stock, date, price, number = line.split(',')
+            stock_pn = portfolio_dict.get(current_stock, (0, 0))
+            stock_pn = stock_pn[0] + float(price), stock_pn[1] + int(number)
+            portfolio_dict[current_stock] = stock_pn
+    return portfolio_dict
 
 
 if __name__ == '__main__':
