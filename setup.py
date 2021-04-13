@@ -50,7 +50,7 @@ def command_quote_handler(message):
     quote, author = 'Quote', 'Author'
     status = quote + " -" + author + "\n"
     try:
-        quote, author = qe.get_quote('ru')
+        quote, author = qe.get_quote('en')
         quote = '<b>' + quote + '</b>'
         author = '<i>' + author + '</i>'
         status = quote + "\n" + author
