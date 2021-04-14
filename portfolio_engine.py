@@ -13,9 +13,13 @@ def get_close_price(stock):
     return get_close_prices(stock)[-1]
 
 
-# TODO: add function for getting profit/loss for all stock in the portfolio
+# TODO: improve code not to use read_portfolio twice: here and in average price
 def get_total_plvalue():
-    pass
+    portfolio_dict = read_portfolio('portfolio.csv')
+    total_pl = 0
+    for key in portfolio_dict:
+        total_pl += get_plvalue(key)
+    return total_pl
 
 
 def get_plvalue(stock):

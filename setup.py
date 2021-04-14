@@ -67,13 +67,15 @@ def command_portfolio_handler(message):
     _, *symbols = message.text.split()
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
 
-    with open('data/portfolio.csv', 'r', encoding='UTF-8') as file:
-        for line in file.readlines():
-            print(line)
-
-    plvalue = pe.get_plvalue(symbols[0].upper())
+    if len(symbols) == 0:
+        plvalue = pe.get_total_plvalue()
+        text_symbol = 'all'
+    else:
+        text_symbol = symbols[0].upper()
+        plvalue = pe.get_plvalue(text_symbol)
+    text = f"This is your {text_symbol} profit/loss so far: {format(plvalue, '.2f')}"
     if plvalue != 0:
-        bot.send_message(cid, f"This is your profit/loss so far: {format(plvalue, '.2f')}", reply_markup=markup)
+        bot.send_message(cid, text, reply_markup=markup)
     else:
         bot.send_message(cid, 'Sorry. You don\'t have this instrument in your portfolio.', reply_markup=markup)
 
