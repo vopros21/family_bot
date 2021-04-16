@@ -43,14 +43,18 @@ def command_start_handler(message):
     bot.send_message(cid, 'Hello, user. I\'m glad to see you', reply_markup=markup)
 
 
-# TODO: add possibility to chose the quote language
+# Looks like quote API knows only EN and RU so only this two languages are supported
 @bot.message_handler(commands=['quote'])
 def command_quote_handler(message):
     cid = message.chat.id
+    message_list = message.text.split()
+    quote_language = 'en'
+    if len(message_list) > 1:
+        quote_language = 'ru'
     quote, author = 'Quote', 'Author'
     status = quote + " -" + author + "\n"
     try:
-        quote, author = qe.get_quote('en')
+        quote, author = qe.get_quote(quote_language)
         quote = '<b>' + quote + '</b>'
         author = '<i>' + author + '</i>'
         status = quote + "\n" + author
