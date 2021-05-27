@@ -1,6 +1,7 @@
 import os
 import quote_engine as qe
 import portfolio_engine as pe
+import db_engine as de
 
 import telebot
 
@@ -19,7 +20,7 @@ commands = {
 }
 
 
-# TODO: add saving statistics to file
+# TODO: add saving statistics to DB
 def get_user_step(uid):
     if uid not in user_steps:
         known_users.append(uid)
@@ -71,13 +72,17 @@ def command_portfolio_handler(message):
     _, *symbols = message.text.split()
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
 
+    plvalue = 0
+    tickers = ''
     if len(symbols) == 0:
         plvalue = pe.get_total_plvalue()
-        text_symbol = 'all'
+        tickers = 'all '
     else:
-        text_symbol = symbols[0].upper()
-        plvalue = pe.get_plvalue(text_symbol)
-    text = f"This is your {text_symbol} profit/loss so far: {format(plvalue, '.2f')}"
+        for symbol in symbols:
+            text_symbol = symbol.upper()
+            plvalue += pe.get_plvalue(text_symbol)
+            tickers += f'{text_symbol} '
+    text = f"This is your {tickers}profit/loss so far: {format(plvalue, '.2f')}"
     if plvalue != 0:
         bot.send_message(cid, text, reply_markup=markup)
     else:
