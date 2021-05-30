@@ -53,6 +53,6 @@ except FileNotFoundError:
 def db_table_val(user_id: int, user_name: str, user_surname: str, username: str, current_date: str):
     conn = sqlite_connect()
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO users (user_id, user_name, user_surname, username, date) VALUES (?, ?, ?, ?)',
+    cursor.execute('INSERT INTO users (user_id, user_name, user_surname, username, date) VALUES (?, ?, ?, ?, ?)',
                    (user_id, user_name, user_surname, username, current_date))
     conn.commit()
