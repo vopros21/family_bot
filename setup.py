@@ -20,14 +20,19 @@ commands = {
 }
 
 
-# TODO: add saving statistics to DB
-def get_user_step(uid):
-    if uid not in user_steps:
-        known_users.append(uid)
-        user_steps[uid] = 0
-    else:
-        user_steps[uid] += 1
-    return user_steps[uid]
+def save_user_stat(message):
+    us_id = message.from_user.id
+    us_name = message.from_user.first_name
+    us_sname = message.from_user.last_name
+    username = message.from_user.username
+    current_date = message.date
+
+    de.db_table_val(user_id=us_id,
+                    user_name=us_name,
+                    user_surname=us_sname,
+                    username=username,
+                    current_date=current_date
+                    )
 
 
 @bot.message_handler(commands=['help'])
@@ -48,18 +53,7 @@ def command_start_handler(message):
 @bot.message_handler(commands=['quote'])
 def command_quote_handler(message):
     cid = message.chat.id
-    us_id = message.from_user.id
-    us_name = message.from_user.first_name
-    us_sname = message.from_user.last_name
-    username = message.from_user.username
-    current_date = message.date
-
-    de.db_table_val(user_id=us_id,
-                    user_name=us_name,
-                    user_surname=us_sname,
-                    username=username,
-                    current_date=current_date
-                    )
+    save_user_stat(message=message)
 
     message_list = message.text.split()
     quote_language = 'en'
@@ -74,14 +68,13 @@ def command_quote_handler(message):
         status = quote + "\n" + author
     except Exception as ex:
         print(ex)
-    print(cid)
-    print(message)
     bot.send_message(cid, status, parse_mode='HTML')
 
 
 @bot.message_handler(regexp='^.portfolio')
 def command_portfolio_handler(message):
     cid = message.chat.id
+    save_user_stat(message=message)
     _, *symbols = message.text.split()
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
 
