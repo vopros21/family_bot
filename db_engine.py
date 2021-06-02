@@ -50,9 +50,29 @@ except FileNotFoundError:
     create_db()
 
 
-def db_table_val(user_id: int, user_name: str, user_surname: str, username: str, current_date: str):
+def db_user_stat(user_id: int, user_name: str, user_surname: str, username: str, current_date: str):
     conn = sqlite_connect()
     cursor = conn.cursor()
     cursor.execute('INSERT INTO users (user_id, user_name, user_surname, username, date) VALUES (?, ?, ?, ?, ?)',
                    (user_id, user_name, user_surname, username, current_date))
     conn.commit()
+    conn.close()
+
+
+def db_save_portfolio(ticker: str, date: str, price: float, quantity: float):
+    conn = sqlite_connect()
+    cursor = conn.cursor()
+    stock_id = 0
+    cursor.execute('INSERT INTO portfolio (stock_id, ticker, date, price, quantity) VALUES (?, ?, ?, ?, ?)',
+                   (stock_id, ticker, date, price, quantity))
+    conn.commit()
+    conn.close()
+    return None
+
+
+def db_read_users(id):
+    conn = sqlite_connect()
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT * FROM users WHERE id={id}")
+    print(cursor.fetchall())
+    conn.close()
