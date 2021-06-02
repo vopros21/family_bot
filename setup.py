@@ -27,7 +27,7 @@ def save_user_stat(message):
     username = message.from_user.username
     current_date = message.date
 
-    de.db_table_val(user_id=us_id,
+    de.db_user_stat(user_id=us_id,
                     user_name=us_name,
                     user_surname=us_sname,
                     username=username,
@@ -35,11 +35,21 @@ def save_user_stat(message):
                     )
 
 
-@bot.message_handler(commands=['help'])
+@bot.message_handler(regexp='^.help')
 def command_help_handler(message):
     cid = message.chat.id
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     bot.send_message(cid, 'This is a help message!', reply_markup=markup)
+    print(message.text)
+
+
+@bot.message_handler(regexp='^.save')
+def command_save_helper(message):
+    cid = message.chat.id
+    ticker, date, price, quantity = message.text.split()
+    # de.db_save_portfolio(ticker, date, price, quantity)
+    de.db_read_users(2)
+    # bot.send_message(cid, f"{quantity} shares for {ticker} with {price} was added to DB for {date}")
 
 
 @bot.message_handler(commands=['start'])
