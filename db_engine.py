@@ -2,12 +2,14 @@ import sqlite3
 from pathlib import Path
 
 
+# Main method to connect to DB
 def sqlite_connect():
     conn = sqlite3.connect("data/database.db", check_same_thread=False)
     conn.execute("pragma journal_mode=wal;")
     return conn
 
 
+# Fill DB with USERS and PORTFOLIO tables
 def init_sqlite():
     conn = sqlite_connect()
     c = conn.cursor()
@@ -32,6 +34,7 @@ def init_sqlite():
     return
 
 
+# Creating DB for the first time
 def create_db():
     try:
         init_sqlite()
@@ -42,6 +45,7 @@ def create_db():
         print('Success!')
 
 
+# Connection to DB or creating a new one
 db = Path("data/database.db")
 try:
     db.resolve(strict=True)
@@ -50,6 +54,7 @@ except FileNotFoundError:
     create_db()
 
 
+# Add user stat to db
 def db_user_stat(user_id: int, user_name: str, user_surname: str, username: str, current_date: str):
     conn = sqlite_connect()
     cursor = conn.cursor()
@@ -59,6 +64,7 @@ def db_user_stat(user_id: int, user_name: str, user_surname: str, username: str,
     conn.close()
 
 
+# Add new data to portfolio db
 def db_save_portfolio(ticker: str, date: str, price: float, quantity: float):
     conn = sqlite_connect()
     cursor = conn.cursor()
@@ -70,9 +76,10 @@ def db_save_portfolio(ticker: str, date: str, price: float, quantity: float):
     return None
 
 
-def db_read_users(id):
+# Read data from USERS
+def db_read_users(userid):
     conn = sqlite_connect()
     cursor = conn.cursor()
-    cursor.execute(f"SELECT * FROM users WHERE id={id}")
+    cursor.execute(f"SELECT * FROM users WHERE id={userid}")
     print(cursor.fetchall())
     conn.close()
