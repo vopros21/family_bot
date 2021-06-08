@@ -1,3 +1,4 @@
+import re
 import sqlite3
 from pathlib import Path
 
@@ -64,8 +65,38 @@ def db_user_stat(user_id: int, user_name: str, user_surname: str, username: str,
     conn.close()
 
 
+# Preparing portfolio data for saving
+def standard_portfolio_data(user_text):
+    _, ticker, date, price, quantity = user_text.split()
+
+    # check ticker format
+    if not re.match('^[A-z]{2,4}$', ticker):
+        return 0, 0, 0, 0
+    else:
+        ticker = ticker.upper()
+
+    # check date format
+    if not re.match('20[0-9]{2}-[0-9]{2}-[0-9]{2}', date):
+        return 0, 0, 0, 0
+
+    # check price format
+    if not re.match('[0-9]+.[0-9]+', price):
+        return 0, 0, 0, 0
+    else:
+        price = float(price)
+
+    # check quantity format
+    if not re.match('[0-9]+', quantity):
+        return 0, 0, 0, 0
+    else:
+        quantity = int(quantity)
+
+    return ticker, date, price, quantity
+
+
 # Add new data to portfolio db
-def db_save_portfolio(ticker: str, date: str, price: float, quantity: float):
+def db_save_portfolio(user_text):
+    ticker, date, price, quantity = standard_portfolio_data(user_text=user_text)
     conn = sqlite_connect()
     cursor = conn.cursor()
     stock_id = 0
