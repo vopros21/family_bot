@@ -66,28 +66,28 @@ def db_user_stat(user_id: int, user_name: str, user_surname: str, username: str,
 
 
 # Preparing portfolio data for saving
-def standard_portfolio_data(user_text):
+def validate_user_input(user_text):
     _, ticker, date, price, quantity = user_text.split()
 
     # check ticker format
     if not re.match('^[A-z]{2,4}$', ticker):
-        return 0, 0, 0, 0
+        return None
     else:
         ticker = ticker.upper()
 
     # check date format
     if not re.match('20[0-9]{2}-[0-9]{2}-[0-9]{2}', date):
-        return 0, 0, 0, 0
+        return None
 
     # check price format
     if not re.match('[0-9]+.[0-9]+', price):
-        return 0, 0, 0, 0
+        return None
     else:
         price = float(price)
 
     # check quantity format
     if not re.match('[0-9]+', quantity):
-        return 0, 0, 0, 0
+        return None
     else:
         quantity = int(quantity)
 
@@ -96,7 +96,10 @@ def standard_portfolio_data(user_text):
 
 # Add new data to portfolio db
 def db_save_portfolio(user_text):
-    ticker, date, price, quantity = standard_portfolio_data(user_text=user_text)
+    try:
+        ticker, date, price, quantity = validate_user_input(user_text=user_text)
+    except TypeError:
+        return 'Saving was not successful'
     conn = sqlite_connect()
     cursor = conn.cursor()
     stock_id = 0
@@ -104,7 +107,7 @@ def db_save_portfolio(user_text):
                    (stock_id, ticker, date, price, quantity))
     conn.commit()
     conn.close()
-    return None
+    return 'Saving was successful!'
 
 
 # Read data from USERS
