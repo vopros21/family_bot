@@ -46,10 +46,13 @@ def command_help_handler(message):
 @bot.message_handler(regexp='^.save')
 def command_save_helper(message):
     cid = message.chat.id
-    ticker, date, price, quantity = message.text.split()
-    # de.db_save_portfolio(ticker, date, price, quantity)
     de.db_read_users(2)
-    # bot.send_message(cid, f"{quantity} shares for {ticker} with {price} was added to DB for {date}")
+    try:
+        ticker, date, price, quantity = de.db_save_portfolio(user_text=message.text)
+        answer_text = f"{quantity} shares for {ticker} with {price} was added to DB for {date}"
+    except ValueError:
+        answer_text = 'Error during saving process.'
+    # bot.send_message(cid, answer_text)
 
 
 @bot.message_handler(commands=['start'])
