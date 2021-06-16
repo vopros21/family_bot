@@ -79,17 +79,31 @@ def validate_user_input(user_text):
         ticker = ticker.upper()
 
     # check date format
-    if not re.match('20[0-9]{2}-[0-9]{2}-[0-9]{2}', date):
+    md_pair = {'01': 31,
+               '02': 28,
+               '03': 31,
+               '04': 30,
+               '05': 31,
+               '06': 30,
+               '07': 31,
+               '08': 31,
+               '09': 30,
+               '10': 31,
+               '11': 30,
+               '12': 31}
+    if not re.match('20[0-9]{2}-[0-9]{2}-[0-9]{2}', date)\
+            or int(date.split('-')[1]) > 12\
+            or int(date.split('-')[2]) > md_pair[date.split('-')[1]]:
         return None
 
     # check price format
-    if not re.match('[0-9]+.[0-9]+', price):
+    if not re.match('[0-9]+[.]+[0-9]+', price):
         return None
     else:
         price = float(price)
 
     # check quantity format
-    if not re.match('[0-9]+', quantity):
+    if not re.match('[0-9]+[^.]+', quantity):
         return None
     else:
         quantity = int(quantity)

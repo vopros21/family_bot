@@ -1,4 +1,3 @@
-import re
 import unittest
 import db_engine as de
 
@@ -9,6 +8,13 @@ class TestValidateUserInput(unittest.TestCase):
         ticker, date, price, quantity = de.validate_user_input('/save aapl 2021-06-01 100.12 2')
         self.assertEqual('AAPL', ticker, "Ticker is not in correct format")
         self.assertEqual('2021-06-01', date, 'Date not is in correct format')
+        self.assertEqual(100.12, price, 'Price is not in correct format')
+        self.assertEqual(2, quantity, 'Quantity is not in correct format')
+
+        user_input_2 = '/save aapl 2021-06-30 100.12 2'
+        ticker, date, price, quantity = de.validate_user_input(user_input_2)
+        self.assertEqual('AAPL', ticker, "Ticker is not in correct format")
+        self.assertEqual('2021-06-30', date, 'Date not is in correct format')
         self.assertEqual(100.12, price, 'Price is not in correct format')
         self.assertEqual(2, quantity, 'Quantity is not in correct format')
 
@@ -45,6 +51,53 @@ class TestValidateUserInput(unittest.TestCase):
         user_input = '/save aapl 2021-6-01 100.12 2'
         none_obj = de.validate_user_input(user_text=user_input)
         self.assertEqual(None, none_obj, 'Wrong month format: one digit')
+        user_input = '/save aapl 2021*06-1 100.12 2'
+        none_obj = de.validate_user_input(user_text=user_input)
+        self.assertEqual(None, none_obj, 'Wrong day format: one digit')
+
+    def test_incorrect_date_wrong_month(self):
+        """Test if month number is not greater than 12"""
+        user_input = '/save aapl 2021-13-01 100.12 2'
+        none_obj = de.validate_user_input(user_text=user_input)
+        self.assertEqual(None, none_obj, 'Month number is greater than 12')
+
+    def test_incorrect_date_wrong_day(self):
+        """Test if day is not greater than in the specified month"""
+        user_input = '/save aapl 2021-06-31 100.12 2'
+        none_obj = de.validate_user_input(user_text=user_input)
+        self.assertEqual(None, none_obj, 'Day number is greater than in the specified month')
+
+        user_input_2 = '/save aapl 2021-02-29 100.12 2'
+        none_obj = de.validate_user_input(user_text=user_input_2)
+        self.assertEqual(None, none_obj, 'Day number is greater than in the specified month')
+
+    def test_incorrect_price_format(self):
+        """Test if price is in correct format"""
+        user_input_1 = '/save aapl 2021-06-01 100,12 2'
+        none_obj = de.validate_user_input(user_text=user_input_1)
+        self.assertEqual(None, none_obj, 'Price is not in correct format')
+
+        user_input_2 = '/save aapl 2021-06-01 10a.12 2'
+        none_obj = de.validate_user_input(user_text=user_input_2)
+        self.assertEqual(None, none_obj, 'Price is not in correct format')
+
+        user_input_3 = '/save aapl 2021-06-01 100 2'
+        none_obj = de.validate_user_input(user_text=user_input_3)
+        self.assertEqual(None, none_obj, 'Price is not in correct format')
+
+        user_input_4 = '/save aapl 2021-06-01 .12 2'
+        none_obj = de.validate_user_input(user_text=user_input_4)
+        self.assertEqual(None, none_obj, 'Price is not in correct format')
+
+    def test_incorrect_quantity_format(self):
+        """Test if quantity shares is in correct format"""
+        user_input_1 = '/save aapl 2021-06-01 100.12 2.2'
+        none_obj = de.validate_user_input(user_text=user_input_1)
+        self.assertEqual(None, none_obj, 'Quantity is not in correct format')
+
+        user_input_1 = '/save aapl 2021-06-01 100.12 a'
+        none_obj = de.validate_user_input(user_text=user_input_1)
+        self.assertEqual(None, none_obj, 'Quantity is not in correct format')
 
 
 if __name__ == '__main__':
