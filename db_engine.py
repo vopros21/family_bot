@@ -91,24 +91,40 @@ def validate_user_input(user_text):
                '10': 31,
                '11': 30,
                '12': 31}
-    if not re.match('20[0-9]{2}-[0-9]{2}-[0-9]{2}', date)\
+    if not re.match('^20[0-9]{2}-[0-9]{2}-[0-9]{2}$', date)\
             or int(date.split('-')[1]) > 12\
             or int(date.split('-')[2]) > md_pair[date.split('-')[1]]:
         return None
 
     # check price format
-    if not re.match('[0-9]+[.]+[0-9]+', price):
+    if not re.match('^[0-9]+[.]+[0-9]+$', price):
         return None
     else:
         price = float(price)
 
     # check quantity format
-    if not re.match('[0-9]+[^.]+', quantity):
+    if not re.match('^[0-9]+$', quantity):
         return None
     else:
         quantity = int(quantity)
 
     return ticker, date, price, quantity
+
+
+# Find ticker id to use for saving
+def db_get_ticker_id(ticker):
+    conn = sqlite_connect()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM portfolio")
+    db_port = cursor.fetchall()
+    conn.close()
+    max_id = 0
+    for line in db_port:
+        if line[1] > max_id:
+            max_id = line[1]
+        if line[2] == ticker:
+            return line[1]
+    return max_id + 1
 
 
 # Add new data to portfolio db
@@ -119,7 +135,7 @@ def db_save_portfolio(user_text):
         return False
     conn = sqlite_connect()
     cursor = conn.cursor()
-    stock_id = 0
+    stock_id = db_get_ticker_id(ticker=ticker)
     cursor.execute('INSERT INTO portfolio (stock_id, ticker, date, price, quantity) VALUES (?, ?, ?, ?, ?)',
                    (stock_id, ticker, date, price, quantity))
     conn.commit()
