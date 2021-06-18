@@ -150,3 +150,13 @@ def db_read_users(userid):
     cursor.execute(f"SELECT * FROM users WHERE id={userid}")
     print(cursor.fetchall())
     conn.close()
+
+
+# Read portfolio from DB
+def db_read_portfolio():
+    connect = sqlite_connect()
+    cursor = connect.cursor()
+    cursor.execute("SELECT * FROM portfolio")
+    answer = cursor.fetchall()
+    connect.close()
+    return answer
