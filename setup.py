@@ -1,11 +1,12 @@
+# external modules
 import os
+import telebot
+from telebot import types
+
+# internal modules
 import quote_engine as qe
 import portfolio_engine as pe
 import db_engine as de
-
-import telebot
-
-from telebot import types
 
 token = os.getenv('API_BOT_TOKEN')
 bot = telebot.TeleBot(token)
@@ -21,20 +22,23 @@ commands = {
 
 
 def save_user_stat(message):
-    us_id = message.from_user.id
+    us_id = int(message.from_user.id)
     us_name = message.from_user.first_name
     us_sname = message.from_user.last_name
     username = message.from_user.username
-    current_date = message.date
+    current_date = int(message.date)
+    query = message.text
 
     de.db_user_stat(user_id=us_id,
                     user_name=us_name,
                     user_surname=us_sname,
                     username=username,
-                    current_date=current_date
+                    current_date=current_date,
+                    query=query
                     )
 
 
+# TODO: update help method to provide some useful information
 @bot.message_handler(regexp='^.help')
 def command_help_handler(message):
     cid = message.chat.id
@@ -45,6 +49,9 @@ def command_help_handler(message):
 
 @bot.message_handler(regexp='^.save')
 def command_save_helper(message):
+    """ Method for adding new shares into portfolio
+        Query format "/save YYYY-MM-DD price quantity"
+    """
     cid = message.chat.id
     try:
         ticker, date, price, quantity = de.db_save_portfolio(user_text=message.text)
@@ -83,6 +90,7 @@ def command_quote_handler(message):
     bot.send_message(cid, status, parse_mode='HTML')
 
 
+# TODO: add possibility to paint graph for portfolio
 @bot.message_handler(regexp='^.portfolio')
 def command_portfolio_handler(message):
     cid = message.chat.id
