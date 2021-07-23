@@ -37,8 +37,6 @@ def read_portfolio():
     portfolio = de.db_read_portfolio()
     for line in portfolio:
         current_stock, date, price, number = line
-        if current_stock == 'TEST':
-            continue
         stock_pn = portfolio_dict.get(current_stock, (0, 0))
         stock_pn = stock_pn[0] + price, stock_pn[1] + int(number)
         portfolio_dict[current_stock] = stock_pn
