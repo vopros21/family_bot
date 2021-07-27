@@ -237,3 +237,16 @@ def get_last_close_price(ticker):
                                 f'ORDER BY date DESC LIMIT 1', (ticker_id, )).fetchone()[0]
     conn.close()
     return last_close
+
+
+def is_stock_in_portfolio(ticker):
+    conn = sqlite_connect()
+    cursor = conn.cursor()
+    result = False
+    symbols = []
+    for symbol in cursor.execute(f'SELECT ticker FROM tickers').fetchall():
+        symbols.append(symbol[0])
+    if ticker in symbols:
+        result = True
+    conn.close()
+    return result
