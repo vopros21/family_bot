@@ -227,7 +227,7 @@ def is_last_day_in_db(ticker):
 def get_last_close_price(ticker):
     conn = sqlite_connect()
     cursor = conn.cursor()
-    ticker_id = get_ticker_id(ticker,cursor)
+    ticker_id = get_ticker_id(ticker, cursor)
     if not is_last_day_in_db(ticker):
         fresh_quotes = mde.get_ticker_quotes(ticker)
         for key in fresh_quotes.keys():
