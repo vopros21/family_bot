@@ -11,12 +11,11 @@ import db_engine as de
 token = os.getenv('API_BOT_TOKEN')
 bot = telebot.TeleBot(token)
 
-known_users = []
-user_steps = {}
 commands = {
     'help': 'How to use the bot',
     'portfolio': 'Get portfolio statistics',
     'quote': 'Get a new smart quote',
+    'save': 'Add new position into portfolio',
     'start': 'The most useful functionality'
 }
 
@@ -38,15 +37,17 @@ def save_user_stat(message):
                     )
 
 
-# TODO: update help method to provide some useful information
 @bot.message_handler(regexp='^.help')
 def command_help_handler(message):
+    """Method for getting some basic info about bot's functionality"""
     cid = message.chat.id
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    bot.send_message(cid, 'This is a help message!', reply_markup=markup)
-    print(message.text)
+    text = '\n\t'.join(commands.keys())
+    bot.send_message(cid, f'You can use the next commands:<b>\n\t{text}</b>\n'
+                          f'For more information use "command man"', parse_mode='HTML')
 
 
+# TODO: add man functionality
 @bot.message_handler(regexp='^.save')
 def command_save_helper(message):
     """ Method for adding new shares into portfolio
@@ -61,6 +62,7 @@ def command_save_helper(message):
     bot.send_message(cid, answer_text)
 
 
+# TODO: add man functionality
 @bot.message_handler(commands=['start'])
 def command_start_handler(message):
     cid = message.chat.id
@@ -68,6 +70,7 @@ def command_start_handler(message):
     bot.send_message(cid, 'Hello, user. I\'m glad to see you', reply_markup=markup)
 
 
+# TODO: add man functionality
 # Looks like quote API knows only EN and RU so only this two languages are supported
 @bot.message_handler(commands=['quote'])
 def command_quote_handler(message):
@@ -91,6 +94,7 @@ def command_quote_handler(message):
 
 
 # TODO: add possibility to paint graph for portfolio
+# TODO: add man functionality
 @bot.message_handler(regexp='^.portfolio')
 def command_portfolio_handler(message):
     cid = message.chat.id
@@ -106,7 +110,12 @@ def command_portfolio_handler(message):
     else:
         for symbol in symbols:
             text_symbol = symbol.upper()
-            plvalue += pe.get_plvalue(text_symbol)
+            plvalue = 0
+            if de.is_stock_in_portfolio(text_symbol):
+                try:
+                    plvalue += pe.get_plvalue(text_symbol)
+                except TypeError as e:
+                    print(f'Wrong argument in db query {e}')
             tickers += f'{text_symbol} '
     text = f"This is your {tickers}profit/loss so far: {format(plvalue, '.2f')}"
     if plvalue != 0:
@@ -115,18 +124,18 @@ def command_portfolio_handler(message):
         bot.send_message(cid, 'Sorry. You don\'t have this instrument in your portfolio.', reply_markup=markup)
 
 
-def morning_message():
-    gid = -449881048
-    quote, author = 'Quote', 'Author'
-    status = quote + " -" + author + "\n"
-    try:
-        quote, author = qe.get_quote('ru')
-        quote = '<b>' + quote + '</b>'
-        author = '<i>' + author + '</i>'
-        status = quote + "\n" + author
-    except Exception as ex:
-        print(ex)
-    bot.send_message(gid, status, parse_mode='HTML')
+# def morning_message():
+#     gid = -449881048
+#     quote, author = 'Quote', 'Author'
+#     status = quote + " -" + author + "\n"
+#     try:
+#         quote, author = qe.get_quote('ru')
+#         quote = '<b>' + quote + '</b>'
+#         author = '<i>' + author + '</i>'
+#         status = quote + "\n" + author
+#     except Exception as ex:
+#         print(ex)
+#     bot.send_message(gid, status, parse_mode='HTML')
 
 
 if __name__ == '__main__':
