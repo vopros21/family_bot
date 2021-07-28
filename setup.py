@@ -37,28 +37,40 @@ def save_user_stat(message):
                     )
 
 
+def manual(command):
+    possible_answers = {
+        'save': 'Command format "/save yyyy-mm-dd value quantity"\n'
+                'Where value is a fractional number (0.0), quantity is a whole number (0)',
+        'quote': 'Command format "/quote" or "/quote ru".'
+                 'Returns some quote in Russian or English (by default)'
+    }
+    return possible_answers[command]
+
+
 @bot.message_handler(regexp='^.help')
 def command_help_handler(message):
     """Method for getting some basic info about bot's functionality"""
     cid = message.chat.id
-    markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     text = '\n\t'.join(commands.keys())
     bot.send_message(cid, f'You can use the next commands:<b>\n\t{text}</b>\n'
                           f'For more information use "command man"', parse_mode='HTML')
 
 
-# TODO: add man functionality
 @bot.message_handler(regexp='^.save')
 def command_save_helper(message):
     """ Method for adding new shares into portfolio
         Query format "/save YYYY-MM-DD price quantity"
     """
     cid = message.chat.id
-    try:
-        ticker, date, price, quantity = de.db_save_portfolio(user_text=message.text)
-        answer_text = f"{quantity} shares for {ticker} with {price} was added to DB for {date}"
-    except TypeError:
-        answer_text = 'Error during saving process.'
+    manual_arg = 'save'
+    if manual_arg in message.text:
+        answer_text = manual(manual_arg)
+    else:
+        try:
+            ticker, date, price, quantity = de.db_save_portfolio(user_text=message.text)
+            answer_text = f"{quantity} shares for {ticker} with {price} was added to DB for {date}"
+        except TypeError:
+            answer_text = 'Error during saving process.'
     bot.send_message(cid, answer_text)
 
 
