@@ -43,7 +43,8 @@ def manual(command):
                 'Where value is a fractional number (0.0), quantity is a whole number (0)',
         'quote': 'Command format "/quote" or "/quote ru".'
                  'Returns some quote in Russian or English (by default)',
-        'start': 'Lorem ipsum'
+        'start': 'Lorem ipsum',
+        'portfolio': 'Lorem ipsum'
     }
     return possible_answers[command]
 
@@ -86,7 +87,6 @@ def command_start_handler(message):
     bot.send_message(cid, answer_text, reply_markup=markup)
 
 
-# TODO: add man functionality
 # Looks like quote API knows only EN and RU so only this two languages are supported
 @bot.message_handler(commands=['quote'])
 def command_quote_handler(message):
@@ -141,20 +141,6 @@ def command_portfolio_handler(message):
         bot.send_message(cid, text, reply_markup=markup)
     else:
         bot.send_message(cid, 'Sorry. You don\'t have this instrument in your portfolio.', reply_markup=markup)
-
-
-# def morning_message():
-#     gid = -449881048
-#     quote, author = 'Quote', 'Author'
-#     status = quote + " -" + author + "\n"
-#     try:
-#         quote, author = qe.get_quote('ru')
-#         quote = '<b>' + quote + '</b>'
-#         author = '<i>' + author + '</i>'
-#         status = quote + "\n" + author
-#     except Exception as ex:
-#         print(ex)
-#     bot.send_message(gid, status, parse_mode='HTML')
 
 
 if __name__ == '__main__':
