@@ -42,7 +42,8 @@ def manual(command):
         'save': 'Command format "/save yyyy-mm-dd value quantity"\n'
                 'Where value is a fractional number (0.0), quantity is a whole number (0)',
         'quote': 'Command format "/quote" or "/quote ru".'
-                 'Returns some quote in Russian or English (by default)'
+                 'Returns some quote in Russian or English (by default)',
+        'start': 'Lorem ipsum'
     }
     return possible_answers[command]
 
@@ -74,12 +75,15 @@ def command_save_helper(message):
     bot.send_message(cid, answer_text)
 
 
-# TODO: add man functionality
 @bot.message_handler(commands=['start'])
 def command_start_handler(message):
     cid = message.chat.id
+    answer_text = 'Hello, user. I\'m glad to see you'
+    manual_arg = 'start'
+    if manual_arg in message.text:
+        answer_text = manual(manual_arg)
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    bot.send_message(cid, 'Hello, user. I\'m glad to see you', reply_markup=markup)
+    bot.send_message(cid, answer_text, reply_markup=markup)
 
 
 # TODO: add man functionality
@@ -88,21 +92,24 @@ def command_start_handler(message):
 def command_quote_handler(message):
     cid = message.chat.id
     save_user_stat(message=message)
-
-    message_list = message.text.split()
-    quote_language = 'en'
-    if len(message_list) > 1:
-        quote_language = 'ru'
-    quote, author = 'Quote', 'Author'
-    status = quote + " -" + author + "\n"
-    try:
-        quote, author = qe.get_quote(quote_language)
-        quote = '<b>' + quote + '</b>'
-        author = '<i>' + author + '</i>'
-        status = quote + "\n" + author
-    except Exception as ex:
-        print(ex)
-    bot.send_message(cid, status, parse_mode='HTML')
+    manual_arg = 'quote'
+    if manual_arg in message.text:
+        answer_text = manual(manual_arg)
+    else:
+        message_list = message.text.split()
+        quote_language = 'en'
+        if len(message_list) > 1:
+            quote_language = 'ru'
+        quote, author = 'Quote', 'Author'
+        answer_text = quote + " -" + author + "\n"
+        try:
+            quote, author = qe.get_quote(quote_language)
+            quote = '<b>' + quote + '</b>'
+            author = '<i>' + author + '</i>'
+            answer_text = quote + "\n" + author
+        except Exception as ex:
+            print(ex)
+    bot.send_message(cid, answer_text, parse_mode='HTML')
 
 
 # TODO: add possibility to paint graph for portfolio
