@@ -11,6 +11,9 @@ import db_engine as de
 token = os.getenv('API_BOT_TOKEN')
 bot = telebot.TeleBot(token)
 
+# manual information argument
+manual_flag = 'man'
+
 commands = {
     'help': 'How to use the bot',
     'portfolio': 'Get portfolio statistics',
@@ -46,7 +49,10 @@ def manual(command):
         'start': 'Lorem ipsum',
         'portfolio': 'Lorem ipsum'
     }
-    return possible_answers[command]
+    try:
+        return possible_answers[command]
+    except KeyError as e:
+        print(f'Manual request for wrong command: {command}\n', e)
 
 
 @bot.message_handler(regexp='^.help')
@@ -65,7 +71,7 @@ def command_save_helper(message):
     """
     cid = message.chat.id
     manual_arg = 'save'
-    if manual_arg in message.text:
+    if manual_flag in message.text:
         answer_text = manual(manual_arg)
     else:
         try:
@@ -93,7 +99,7 @@ def command_quote_handler(message):
     cid = message.chat.id
     save_user_stat(message=message)
     manual_arg = 'quote'
-    if manual_arg in message.text:
+    if manual_flag in message.text:
         answer_text = manual(manual_arg)
     else:
         message_list = message.text.split()
@@ -113,7 +119,6 @@ def command_quote_handler(message):
 
 
 # TODO: add possibility to paint graph for portfolio
-# TODO: add man functionality
 @bot.message_handler(regexp='^.portfolio')
 def command_portfolio_handler(message):
     cid = message.chat.id
@@ -121,26 +126,32 @@ def command_portfolio_handler(message):
     _, *symbols = message.text.split()
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
 
-    plvalue = 0
-    tickers = ''
-    if len(symbols) == 0:
-        plvalue = pe.get_total_plvalue()
-        tickers = 'all '
+    manual_arg = 'portfolio'
+    if manual_flag in message.text:
+        answer_text = manual(manual_arg)
     else:
-        for symbol in symbols:
-            text_symbol = symbol.upper()
-            plvalue = 0
-            if de.is_stock_in_portfolio(text_symbol):
-                try:
-                    plvalue += pe.get_plvalue(text_symbol)
-                except TypeError as e:
-                    print(f'Wrong argument in db query {e}')
-            tickers += f'{text_symbol} '
-    text = f"This is your {tickers}profit/loss so far: {format(plvalue, '.2f')}"
-    if plvalue != 0:
-        bot.send_message(cid, text, reply_markup=markup)
-    else:
-        bot.send_message(cid, 'Sorry. You don\'t have this instrument in your portfolio.', reply_markup=markup)
+        plvalue = 0
+        tickers = ''
+        if len(symbols) == 0:
+            plvalue = pe.get_total_plvalue()
+            tickers = 'all '
+        else:
+            for symbol in symbols:
+                text_symbol = symbol.upper()
+                plvalue = 0
+                if de.is_stock_in_portfolio(text_symbol):
+                    try:
+                        plvalue += pe.get_plvalue(text_symbol)
+                    except TypeError as e:
+                        print(f'Wrong argument in db query {e}')
+                tickers += f'{text_symbol} '
+        if plvalue != 0:
+            answer_text = f"This is your {tickers}profit/loss so far: {format(plvalue, '.2f')}"
+
+        else:
+            answer_text = 'Sorry. You don\'t have this instrument in your portfolio.'
+
+    bot.send_message(cid, answer_text, reply_markup=markup)
 
 
 if __name__ == '__main__':
