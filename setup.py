@@ -118,6 +118,13 @@ def command_quote_handler(message):
     bot.send_message(cid, answer_text, parse_mode='HTML')
 
 
+@bot.message_handler(commands=['print'])
+def print_image(message):
+    cid = message.chat.id
+    bot.send_photo(chat_id=cid, photo=open('data/ple_images/graph.png', 'rb'))
+    # bot.send_photo(chat_id=cid, photo='http://img.shangdixinxi.com/up/info/202108/20210807222357618944.jpeg')
+
+
 # TODO: add possibility to paint graph for portfolio
 @bot.message_handler(regexp='^.portfolio')
 def command_portfolio_handler(message):
