@@ -240,13 +240,14 @@ def get_last_close_price(ticker):
 
 
 def is_stock_in_portfolio(ticker):
+    return True if ticker in portfolio_tickers() else False
+
+
+def portfolio_tickers():
     conn = sqlite_connect()
     cursor = conn.cursor()
-    result = False
     symbols = []
-    for symbol in cursor.execute(f'SELECT ticker FROM tickers').fetchall():
-        symbols.append(symbol[0])
-    if ticker in symbols:
-        result = True
+    for symbol in cursor.execute('SELECT ticker FROM tickers').fetchall():
+        symbols.append(symbol)
     conn.close()
-    return result
+    return symbols
