@@ -7,6 +7,7 @@ from telebot import types
 import quote_engine as qe
 import portfolio_engine as pe
 import db_engine as de
+import plot_engine as ple
 
 token = os.getenv('API_BOT_TOKEN')
 bot = telebot.TeleBot(token)
@@ -118,10 +119,12 @@ def command_quote_handler(message):
     bot.send_message(cid, answer_text, parse_mode='HTML')
 
 
-@bot.message_handler(commands=['print'])
+@bot.message_handler(regexp='^.print')
 def print_image(message):
     cid = message.chat.id
-    bot.send_photo(chat_id=cid, photo=open('data/ple_images/graph.png', 'rb'))
+    _, *symbols = message.text.split()
+    image_path = ple.print_profit_loss(tickers=symbols)
+    bot.send_photo(chat_id=cid, photo=open(f'{image_path}', 'rb'))
     # bot.send_photo(chat_id=cid, photo='http://img.shangdixinxi.com/up/info/202108/20210807222357618944.jpeg')
 
 
