@@ -1,5 +1,7 @@
 import re
 import matplotlib.pyplot as plt
+import datetime
+import db_engine as de
 
 
 # form link to generated image
@@ -8,10 +10,26 @@ def link_to_image(name: str):
 
 
 # return path to image
-def print_profit_loss(tickers: list, time_period='1y'):
-    image_title = ''
+def print_profit_loss(tickers=(), time_period='1y'):
+    today = int(datetime.datetime.now().timestamp() // 100 * 100)
+    image_title = f'graph_{today}.png'
+    image_path = link_to_image(image_title)
+    pl_data = {}
+    if len(tickers) > 0:
+        for ticker in tickers:
+            current_dict_data = get_ticker_data(ticker, time_period)
+            for key in current_dict_data.keys():
+                pl_data[key] = pl_data.get(key, 0) + current_dict_data[key]
+    else:
+        pl_data = get_all_data(time_period)
 
-    return link_to_image(name=image_title)
+    # print graph for PL
+    dates = list(pl_data.keys())
+    values = list(pl_data.values())
+    fig, axs = plt.subplots(1, 1, figsize=(3, 3))
+    axs.bar(dates, values)
+    plt.savefig(image_path)
+    return image_path
 
 
 # TODO: create set of dates, ask PL for each date and form the result dictionary
@@ -21,11 +39,12 @@ def get_ticker_data(ticker: str, time_period: str):
 
 
 # TODO: assemble information for several different tickers
-def get_all_data(time_period):
+def get_all_data(time_period: str):
+    symbols_in_portfolio = de.portfolio_tickers()
     return {}
 
 
-if __name__ == '__main__':
+def sample():
     data = {'apple': 10, 'orange': 15, 'lemon': 5, 'lime': 20}
     names = list(data.keys())
     values = list(data.values())
@@ -38,3 +57,7 @@ if __name__ == '__main__':
     # plt.show()
     plt.savefig('data/ple_images/graph.png')
 
+
+if __name__ == '__main__':
+    # print(print_profit_loss())
+    pass
