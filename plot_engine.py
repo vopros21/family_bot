@@ -34,14 +34,18 @@ def print_profit_loss(tickers=(), time_period='1y'):
 
 # TODO: create set of dates, ask PL for each date and form the result dictionary
 def get_ticker_data(ticker: str, time_period: str):
+    return de.select_market_data(ticker, time_period)
 
-    return {}
 
-
-# TODO: assemble information for several different tickers
+# assemble information for several different tickers
 def get_all_data(time_period: str):
     symbols_in_portfolio = de.portfolio_tickers()
-    return {}
+    pl_data = {}
+    for symbol in symbols_in_portfolio:
+        current_dict = get_ticker_data(symbol, time_period)
+        for key in current_dict.keys():
+            pl_data[key] = pl_data.get(key, 0) + current_dict[key]
+    return pl_data
 
 
 def sample():
