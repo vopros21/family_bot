@@ -251,3 +251,21 @@ def portfolio_tickers():
         symbols.append(symbol)
     conn.close()
     return symbols
+
+
+# TODO: method returning market data for specified symbol
+def select_market_data(ticker: str, period: str):
+    conn = sqlite_connect()
+    cursor = conn.cursor()
+    period_ago = 0
+    start_date = max(get_first_position_date(ticker), period_ago)
+
+
+# method returning the date of the first position
+def get_first_position_date(ticker: str):
+    conn = sqlite_connect()
+    cursor = conn.cursor()
+    ticker_id = get_ticker_id(ticker, cursor)
+    position_dates = cursor.execute('SELECT date FROM portfolio WHERE ticker_id = ?', (ticker_id, )).fetchall()
+    conn.close()
+    return min(position_dates)
