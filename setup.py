@@ -125,7 +125,6 @@ def print_image(message):
     _, *symbols = message.text.split()
     image_path = ple.print_profit_loss(tickers=symbols)
     bot.send_photo(chat_id=cid, photo=open(f'{image_path}', 'rb'))
-    # bot.send_photo(chat_id=cid, photo='http://img.shangdixinxi.com/up/info/202108/20210807222357618944.jpeg')
 
 
 # TODO: add possibility to paint graph for portfolio
