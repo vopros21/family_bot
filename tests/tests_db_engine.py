@@ -109,7 +109,15 @@ class TestGetFirstPositionDate(unittest.TestCase):
     def test_correct_date(self):
         apple_first_date = str(datetime.fromtimestamp(de.get_first_position_date('AAPL')[0])).split()[0]
         apple_first_date_sample = '2020-10-09'
-        self.assertEqual(apple_first_date_sample, apple_first_date, 'Date is incorrect')
+        self.assertEqual(apple_first_date_sample, apple_first_date, 'The first date for Apple is incorrect')
+        coke_first_date = str(datetime.fromtimestamp(de.get_first_position_date('KO')[0])).split()[0]
+        coke_first_date_sample = '2021-01-29'
+        self.assertEqual(coke_first_date_sample, coke_first_date, 'The first date for Coke is incorrect')
+
+    def test_incorrect_date(self):
+        apple_first_date = str(datetime.fromtimestamp(de.get_first_position_date('AAPL')[0])).split()[0]
+        incorrect_date = '202-11-03'
+        self.assertNotEqual(incorrect_date, apple_first_date, 'The first date for Apple is incorrect')
 
 
 if __name__ == '__main__':
