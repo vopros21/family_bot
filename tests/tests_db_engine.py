@@ -105,5 +105,12 @@ class TestValidateUserInput(unittest.TestCase):
         self.assertIsNone(none_obj, 'Quantity is not in correct format')
 
 
+class TestGetFirstPositionDate(unittest.TestCase):
+    def test_correct_date(self):
+        apple_first_date = str(datetime.fromtimestamp(de.get_first_position_date('AAPL')[0])).split()[0]
+        apple_first_date_sample = '2020-10-09'
+        self.assertEqual(apple_first_date_sample, apple_first_date, 'Date is incorrect')
+
+
 if __name__ == '__main__':
     unittest.main()
