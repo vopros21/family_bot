@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime
+import datetime
 
 import db_engine as de
 
@@ -9,7 +9,7 @@ class TestValidateUserInput(unittest.TestCase):
         """Test if user inputs the correct data"""
         user_input_1 = '/save aapl 2021-06-01 100.12 2'
         ticker, date, price, quantity = de.validate_user_input(user_input_1)
-        date = str(datetime.fromtimestamp(date)).split()[0]
+        date = str(datetime.datetime.fromtimestamp(date)).split()[0]
         self.assertEqual('AAPL', ticker, "Ticker is not in correct format")
         self.assertEqual('2021-06-01', date, 'Date not is in correct format')
         self.assertEqual(100.12, price, 'Price is not in correct format')
@@ -17,7 +17,7 @@ class TestValidateUserInput(unittest.TestCase):
 
         user_input_2 = '/save aapl 2021-06-30 100.12 2'
         ticker, date, price, quantity = de.validate_user_input(user_input_2)
-        date = str(datetime.fromtimestamp(date)).split()[0]
+        date = str(datetime.datetime.fromtimestamp(date)).split()[0]
         self.assertEqual('AAPL', ticker, "Ticker is not in correct format")
         self.assertEqual('2021-06-30', date, 'Date not is in correct format')
         self.assertEqual(100.12, price, 'Price is not in correct format')
@@ -107,17 +107,24 @@ class TestValidateUserInput(unittest.TestCase):
 
 class TestGetFirstPositionDate(unittest.TestCase):
     def test_correct_date(self):
-        apple_first_date = str(datetime.fromtimestamp(de.get_first_position_date('AAPL')[0])).split()[0]
+        apple_first_date = str(datetime.datetime.fromtimestamp(de.get_first_position_date('AAPL')[0])).split()[0]
         apple_first_date_sample = '2020-10-09'
         self.assertEqual(apple_first_date_sample, apple_first_date, 'The first date for Apple is incorrect')
-        coke_first_date = str(datetime.fromtimestamp(de.get_first_position_date('KO')[0])).split()[0]
+        coke_first_date = str(datetime.datetime.fromtimestamp(de.get_first_position_date('KO')[0])).split()[0]
         coke_first_date_sample = '2021-01-29'
         self.assertEqual(coke_first_date_sample, coke_first_date, 'The first date for Coke is incorrect')
 
     def test_incorrect_date(self):
-        apple_first_date = str(datetime.fromtimestamp(de.get_first_position_date('AAPL')[0])).split()[0]
+        apple_first_date = str(datetime.datetime.fromtimestamp(de.get_first_position_date('AAPL')[0])).split()[0]
         incorrect_date = '202-11-03'
         self.assertNotEqual(incorrect_date, apple_first_date, 'The first date for Apple is incorrect')
+
+
+class TestGetDatePeriodAgo(unittest.TestCase):
+    def test_one_year(self):
+        now = int((datetime.datetime.today() - datetime.timedelta(days=365)).timestamp())
+        one_year_ago = (de.get_date_period_ago('1y'))
+        self.assertEqual(now, one_year_ago, 'Text')
 
 
 if __name__ == '__main__':
