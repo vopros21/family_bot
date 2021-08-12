@@ -257,7 +257,7 @@ def portfolio_tickers():
 def select_market_data(ticker: str, period: str):
     conn = sqlite_connect()
     cursor = conn.cursor()
-    period_ago = 0
+    period_ago = get_date_period_ago(period)
     start_date = max(get_first_position_date(ticker), period_ago)
 
 
@@ -269,3 +269,10 @@ def get_first_position_date(ticker: str):
     position_dates = cursor.execute('SELECT date FROM portfolio WHERE ticker_id = ?', (ticker_id, )).fetchall()
     conn.close()
     return min(position_dates)
+
+
+# method returns the start date for specified period
+def get_date_period_ago(period: str):
+    switch = {'1y': 365, '1m': 31, '1w': 7}
+    today = datetime.datetime.today()
+    return int((today - datetime.timedelta(switch[period])).timestamp())
