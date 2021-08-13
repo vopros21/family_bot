@@ -124,7 +124,12 @@ class TestGetDatePeriodAgo(unittest.TestCase):
     def test_one_year(self):
         now = int((datetime.datetime.today() - datetime.timedelta(days=365)).timestamp())
         one_year_ago = (de.get_date_period_ago('1y'))
-        self.assertEqual(now, one_year_ago, 'Text')
+        self.assertEqual(now, one_year_ago, 'Date for one year ago is not correct')
+
+    def test_one_month(self):
+        now = int((datetime.datetime.today() - datetime.timedelta(days=31)).timestamp())
+        one_month_ago = de.get_date_period_ago('1m')
+        self.assertEqual(now, one_month_ago, 'Date for one month ago is not correct')
 
 
 if __name__ == '__main__':
