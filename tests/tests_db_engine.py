@@ -132,5 +132,22 @@ class TestGetDatePeriodAgo(unittest.TestCase):
         self.assertEqual(now, one_month_ago, 'Date for one month ago is not correct')
 
 
+class TestSelectMarketData(unittest.TestCase):
+    def test_one_week(self):
+        print(de.select_market_data('AAPL', '1w'))
+
+
+class TestIsStockInPortfolio(unittest.TestCase):
+    def test_stock_in_portfolio(self):
+        ticker = 'TEST'
+        flag = de.is_stock_in_portfolio(ticker)
+        self.assertTrue(flag, f'Stock {ticker} is not in portfolio')
+
+    def test_stock_absence(self):
+        ticker = 'TEST3'
+        flag = de.is_stock_in_portfolio(ticker)
+        self.assertFalse(flag, f'Stock {ticker} is in portfolio')
+
+
 if __name__ == '__main__':
     unittest.main()
