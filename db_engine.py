@@ -260,20 +260,18 @@ def select_market_data(ticker: str, period: str):
     conn = sqlite_connect()
     cursor = conn.cursor()
     period_ago = get_date_period_ago(period)
-    start_date = max(get_first_position_date(ticker), period_ago)
-    ticker_id = get_ticker_id(ticker)
+    start_date = max(get_first_position_date(ticker, cursor)[0], period_ago)
+    ticker_id = get_ticker_id(ticker, cursor)
     market_data_for_period = cursor.execute('SELECT date, close FROM market_data_day '
-                                            'WHERE ticker_id = ? and date < ?', (ticker_id, start_date)).fetchall()
+                                            'WHERE ticker_id = ? and date > ?', (ticker_id, start_date)).fetchall()
+    conn.close()
     return market_data_for_period
 
 
 # method returning the date of the first position
-def get_first_position_date(ticker: str):
-    conn = sqlite_connect()
-    cursor = conn.cursor()
+def get_first_position_date(ticker: str, cursor):
     ticker_id = get_ticker_id(ticker, cursor)
     position_dates = cursor.execute('SELECT date FROM portfolio WHERE ticker_id = ?', (ticker_id, )).fetchall()
-    conn.close()
     return min(position_dates)
 
 
