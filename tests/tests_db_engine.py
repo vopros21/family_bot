@@ -131,6 +131,11 @@ class TestGetDatePeriodAgo(unittest.TestCase):
         one_month_ago = de.get_date_period_ago('1m')
         self.assertEqual(now, one_month_ago, 'Date for one month ago is not correct')
 
+    def test_one_week(self):
+        now = int((datetime.datetime.today() - datetime.timedelta(days=7)).timestamp())
+        one_week_ago = de.get_date_period_ago('1w')
+        self.assertEqual(now, one_week_ago, 'Date for one week ago is not correct')
+
 
 class TestSelectMarketData(unittest.TestCase):
     def test_one_week(self):
