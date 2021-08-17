@@ -286,6 +286,7 @@ def get_buy_prices(ticker: str):
     conn = sqlite_connect()
     cursor = conn.cursor()
     ticker_id = get_ticker_id(ticker, cursor)
-    buy_prices = cursor.execute('SELECT date, price FROM portfolio WHERE ticker_id = ?', (ticker_id, )).fetchall()
+    buy_prices = cursor.execute('SELECT date, price, quantity FROM portfolio WHERE ticker_id = ?',
+                                (ticker_id, )).fetchall()
     conn.close()
     return buy_prices
