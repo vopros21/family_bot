@@ -253,7 +253,7 @@ def portfolio_tickers():
     return symbols
 
 
-# TODO: method returning market data for specified symbol
+# method returning market data for specified symbol
 def select_market_data(ticker: str, period: str):
     if not is_stock_in_portfolio(ticker):
         return None
@@ -280,3 +280,12 @@ def get_date_period_ago(period: str):
     switch = {'1y': 365, '1m': 31, '1w': 7}
     today = datetime.datetime.today()
     return int((today - datetime.timedelta(switch[period])).timestamp())
+
+
+def get_buy_prices(ticker: str):
+    conn = sqlite_connect()
+    cursor = conn.cursor()
+    ticker_id = get_ticker_id(ticker, cursor)
+    buy_prices = cursor.execute('SELECT date, price FROM portfolio WHERE ticker_id = ?', (ticker_id, )).fetchall()
+    conn.close()
+    return buy_prices
