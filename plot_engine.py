@@ -37,8 +37,13 @@ def get_ticker_profit_data(ticker: str, time_period: str):
     market_data = de.select_market_data(ticker, time_period)
     buy_prices = de.get_buy_prices(ticker)
     pldata = {}
-    for row in market_data:
-
+    count = 0
+    for row in market_data: # dpq for date_price_quantity
+        if row[0] >= buy_prices[count][0] and count < len(buy_prices):
+            count += 1
+        date = row[0]
+        close = row[1]
+        pldata[date] = pldata.get(date, 0) + (close - buy_prices[count][1] / buy_prices[count][2]) * buy_prices[count][2]
     return pldata
 
 
