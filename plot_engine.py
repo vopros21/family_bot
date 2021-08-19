@@ -1,4 +1,3 @@
-import re
 import matplotlib.pyplot as plt
 import datetime
 import db_engine as de
@@ -38,7 +37,7 @@ def get_ticker_profit_data(ticker: str, time_period: str):
     buy_prices = de.get_buy_prices(ticker)
     pldata = {}
     count = 0
-    for row in market_data: # dpq for date_price_quantity
+    for row in market_data:  # dpq for date_price_quantity
         if row[0] >= buy_prices[count][0] and count < len(buy_prices):
             count += 1
         date = row[0]
