@@ -19,7 +19,8 @@ def print_profit_loss(tickers=(), time_period='1y'):
         for ticker in tickers:
             current_dict_data = get_ticker_profit_data(ticker, time_period)
             for key in current_dict_data.keys():
-                pl_data[key] = pl_data.get(key, 0) + current_dict_data[key]
+                # pl_data[key] = pl_data.get(key, 0) + current_dict_data[key]
+                pl_data[key] += current_dict_data[key]
     else:
         pl_data = get_all_data(time_period)
 
@@ -37,8 +38,7 @@ def get_ticker_profit_data(ticker: str, time_period: str):
     market_data = de.select_market_data(ticker, time_period)
     average_buy_price, quantity = pe.average_price(ticker)
     pldata = {}
-    count = 0
-    for row in market_data:  # dpq for date_price_quantity
+    for row in market_data:
         date = row[0]
         profit = (row[1] - average_buy_price) * quantity
         pldata[date] = profit
@@ -52,7 +52,7 @@ def get_all_data(time_period: str):
     for symbol in symbols_in_portfolio:
         current_dict = get_ticker_profit_data(symbol, time_period)
         for key in current_dict.keys():
-            pl_data[key] = pl_data.get(key, 0) + current_dict[key]
+            pl_data[str(key)] = pl_data.get(str(key), 0) + current_dict[key]
     return pl_data
 
 
