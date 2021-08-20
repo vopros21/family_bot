@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import datetime
 import db_engine as de
+import portfolio_engine as pe
 
 
 # form link to generated image
@@ -31,18 +32,16 @@ def print_profit_loss(tickers=(), time_period='1y'):
     return image_path
 
 
-# TODO: create set of dates, ask PL for each date and form the result dictionary
+# create set of dates, ask PL for each date and form the result dictionary
 def get_ticker_profit_data(ticker: str, time_period: str):
     market_data = de.select_market_data(ticker, time_period)
-    buy_prices = de.get_buy_prices(ticker)
+    average_buy_price, quantity = pe.average_price(ticker)
     pldata = {}
     count = 0
     for row in market_data:  # dpq for date_price_quantity
-        if row[0] >= buy_prices[count][0] and count < len(buy_prices):
-            count += 1
         date = row[0]
-        close = row[1]
-        pldata[date] = pldata.get(date, 0) + (close - buy_prices[count][1] / buy_prices[count][2]) * buy_prices[count][2]
+        profit = (row[1] - average_buy_price) * quantity
+        pldata[date] = profit
     return pldata
 
 
