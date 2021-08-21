@@ -12,8 +12,8 @@ return some quote in English or Russian:
     - '/portfolio' # returns profit/loss for current portfolio in total
     - '/portfolio symbol' # returns profit/loss for specified symbol if it's presented in portfolio
     - '/save symbol yyyy-mm-dd spending quantity' # save new opened position in the portfolio
-    - '/portfolio print' # print graph for profit/loss at current day
-    - '/portfolio print symbol' # print graph for profit/loss for specified symbol at current day
+    - '/print' # print graph for profit/loss at current day
+    - '/print symbol' # print graph for profit/loss for specified symbol at current day
 
 Bot can be started in the command line with 'python3 setup.py' 
 For running raspberryPi is perfect. 
