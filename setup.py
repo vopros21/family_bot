@@ -119,6 +119,7 @@ def command_quote_handler(message):
     bot.send_message(cid, answer_text, parse_mode='HTML')
 
 
+# TODO: add possibility to paint graph for portfolio
 @bot.message_handler(regexp='^.print')
 def print_image(message):
     cid = message.chat.id
@@ -127,7 +128,7 @@ def print_image(message):
     bot.send_photo(chat_id=cid, photo=open(f'{image_path}', 'rb'))
 
 
-# TODO: add possibility to paint graph for portfolio
+# assemble info about profit/loss for whole portfolio or list of specified symbols
 @bot.message_handler(regexp='^.portfolio')
 def command_portfolio_handler(message):
     cid = message.chat.id
