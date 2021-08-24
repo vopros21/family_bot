@@ -142,6 +142,9 @@ class TestSelectMarketData(unittest.TestCase):
     def test_one_week(self):
         print(de.select_market_data('AAPL', '1w'))
 
+    def test_one_month(self):
+        print(de.select_market_data('AAPL', '1m'))
+
 
 class TestIsStockInPortfolio(unittest.TestCase):
     def test_stock_in_portfolio(self):
