@@ -8,7 +8,7 @@ def get_close_price(stock):
 
 # TODO: improve code not to use read_portfolio twice: here and in average price
 def get_total_plvalue():
-    portfolio_dict = read_portfolio()
+    portfolio_dict = de.portfolio_tickers()
     total_pl = 0
     for key in portfolio_dict:
         total_pl += get_plvalue(key)
