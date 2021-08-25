@@ -149,7 +149,6 @@ class TestSelectMarketData(unittest.TestCase):
         print(de.select_market_data('AAPL', '1y'))
 
 
-
 class TestIsStockInPortfolio(unittest.TestCase):
     def test_stock_in_portfolio(self):
         ticker = 'TEST'
