@@ -164,6 +164,9 @@ class TestIsStockInPortfolio(unittest.TestCase):
         ticker = 'abc'
         flag = de.is_stock_in_portfolio(ticker)
         self.assertFalse(flag, f'Stock {ticker} is in portfolio')
+        ticker = '123'
+        flag = de.is_stock_in_portfolio(ticker)
+        self.assertFalse(flag, f'Stock {ticker} is in portfolio')
 
 
 if __name__ == '__main__':
