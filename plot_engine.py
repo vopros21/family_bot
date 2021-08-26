@@ -10,6 +10,7 @@ def link_to_image(name: str):
     return f'data/ple_images/{name}'
 
 
+# TODO: reformat the method. Add green area for profit and red area for loss
 # return path to image
 def print_profit_loss(tickers=(), time_period='1y'):
     today = int(datetime.datetime.now().timestamp() // 100 * 100)
@@ -26,24 +27,26 @@ def print_profit_loss(tickers=(), time_period='1y'):
         pl_data = get_all_data(time_period)
 
     # print graph for PL
-    dates = list(pl_data.keys())
+    dates_ts = list(pl_data.keys())
+    dates = []
+    for timestamp in dates_ts:
+        date = datetime.datetime.fromtimestamp(float(timestamp))
+        dates.append(date)
     values = list(pl_data.values())
-    fig, axs = plt.subplots(1, 1, figsize=(15, 5))
+    fig, axs = plt.subplots(1, 1, figsize=(10, 5))
     axs.plot(dates, values, label="total")
     axs.set_xlabel('time')
     axs.set_ylabel('profit, $')
 
     # grid settings
     axs.grid(True)
-    fmt_month = mdates.MonthLocator(interval=30)
-    ftm_week = mdates.MonthLocator(interval=7)
+    fmt_month = mdates.MonthLocator(interval=1)
+    ftm_day = mdates.DayLocator(interval=3)
     axs.xaxis.set_major_locator(fmt_month)
-    axs.xaxis.set_minor_locator(ftm_week)
-    # Text in the x axis will be displayed in 'YYYY-mm' format.
-    # axs.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+    axs.xaxis.set_minor_locator(ftm_day)
     fig.autofmt_xdate()
-    # plt.savefig(image_path)
-    plt.show()
+    plt.savefig(image_path)
+    # plt.show()
     return image_path
 
 
