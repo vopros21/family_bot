@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import datetime
 import db_engine as de
 import portfolio_engine as pe
@@ -27,9 +28,22 @@ def print_profit_loss(tickers=(), time_period='1y'):
     # print graph for PL
     dates = list(pl_data.keys())
     values = list(pl_data.values())
-    fig, axs = plt.subplots(1, 1, figsize=(3, 3))
-    axs.bar(dates, values)
-    plt.savefig(image_path)
+    fig, axs = plt.subplots(1, 1, figsize=(15, 5))
+    axs.plot(dates, values, label="total")
+    axs.set_xlabel('time')
+    axs.set_ylabel('profit, $')
+
+    # grid settings
+    axs.grid(True)
+    fmt_month = mdates.MonthLocator(interval=30)
+    ftm_week = mdates.MonthLocator(interval=7)
+    axs.xaxis.set_major_locator(fmt_month)
+    axs.xaxis.set_minor_locator(ftm_week)
+    # Text in the x axis will be displayed in 'YYYY-mm' format.
+    # axs.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+    fig.autofmt_xdate()
+    # plt.savefig(image_path)
+    plt.show()
     return image_path
 
 
@@ -71,4 +85,4 @@ def sample():
 
 
 if __name__ == '__main__':
-    pass
+    print_profit_loss()
