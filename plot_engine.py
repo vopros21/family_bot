@@ -21,8 +21,7 @@ def print_profit_loss(tickers=(), time_period='1y'):
         for ticker in tickers:
             current_dict_data = get_ticker_profit_data(ticker, time_period)
             for key in current_dict_data.keys():
-                # pl_data[key] = pl_data.get(key, 0) + current_dict_data[key]
-                pl_data[key] += current_dict_data[key]
+                pl_data[key] = pl_data.get(key, 0) + current_dict_data[key]
     else:
         pl_data = get_all_data(time_period)
 
@@ -45,8 +44,8 @@ def print_profit_loss(tickers=(), time_period='1y'):
     axs.xaxis.set_major_locator(fmt_month)
     axs.xaxis.set_minor_locator(ftm_day)
     fig.autofmt_xdate()
-    plt.savefig(image_path)
-    # plt.show()
+    # plt.savefig(image_path)
+    plt.show()
     return image_path
 
 
