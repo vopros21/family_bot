@@ -1,20 +1,22 @@
-# Get array of close prices for stock
 import db_engine as de
 
 
 def get_close_price(stock):
+    """The method returns an array of close prices for specified stock"""
     return de.get_last_close_price(stock)
 
 
 def get_total_plvalue():
+    """The method returns profit/loss value for the whole portfolio"""
     portfolio_dict = de.portfolio_tickers()
     total_pl = 0
-    for key in portfolio_dict:
-        total_pl += get_plvalue(key)
+    for stock in portfolio_dict:
+        total_pl += get_plvalue(stock)
     return total_pl
 
 
 def get_plvalue(stock):
+    """The method returns profit/loss value for a specified stock"""
     current_price = float(get_close_price(stock))
     buying_price, quantity = average_price(stock)
     return quantity * (current_price - float(buying_price))
