@@ -23,6 +23,7 @@ def get_plvalue(stock):
 
 
 def average_price(stock):
+    """The method returns an average price for a specified symbol"""
     portfolio_dict = read_portfolio()
     if stock in portfolio_dict.keys():
         total_number = portfolio_dict[stock][1]
