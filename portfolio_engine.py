@@ -35,6 +35,7 @@ def average_price(stock):
 
 # read the whole portfolio into a dictionary
 def read_portfolio():
+    """Get all stocks in the portfolio"""
     portfolio_dict = {}
     portfolio = de.db_read_portfolio()
     for line in portfolio:
