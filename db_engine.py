@@ -277,7 +277,10 @@ def get_first_position_date(ticker: str, cursor):
 
 # method returns the start date for specified period
 def get_date_period_ago(period: str):
+    """Get the beginning date for the specified period"""
     switch = {'1y': 365, '1m': 31, '1w': 7}
+    if period not in switch:
+        period = '1y'
     today = datetime.datetime.today()
     return int((today - datetime.timedelta(switch[period])).timestamp())
 
