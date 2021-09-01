@@ -270,6 +270,7 @@ def select_market_data(ticker: str, period: str):
 
 # method returning the date of the first position
 def get_first_position_date(ticker: str, cursor):
+    """Get the opening date for the specified symbol"""
     ticker_id = get_ticker_id(ticker, cursor)
     position_dates = cursor.execute('SELECT date FROM portfolio WHERE ticker_id = ?', (ticker_id, )).fetchall()
     return min(position_dates)
