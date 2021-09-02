@@ -287,6 +287,7 @@ def get_date_period_ago(period: str):
 
 
 def get_buy_prices(ticker: str):
+    """Get whole history for the specified symbol in the portfolio"""
     conn = sqlite_connect()
     cursor = conn.cursor()
     ticker_id = get_ticker_id(ticker, cursor)
