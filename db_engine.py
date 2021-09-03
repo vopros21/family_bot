@@ -255,6 +255,7 @@ def portfolio_tickers():
 
 # method returning market data for specified symbol
 def select_market_data(ticker: str, period: str):
+    """Returns close prices for a specified symbol and period from DB"""
     if not is_stock_in_portfolio(ticker):
         return None
     conn = sqlite_connect()
