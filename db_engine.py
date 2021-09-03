@@ -244,6 +244,7 @@ def is_stock_in_portfolio(ticker):
 
 
 def portfolio_tickers():
+    """Returns tickers presented in the portfolio"""
     conn = sqlite_connect()
     cursor = conn.cursor()
     symbols = []
