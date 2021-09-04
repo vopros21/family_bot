@@ -240,6 +240,7 @@ def get_last_close_price(ticker):
 
 
 def is_stock_in_portfolio(ticker):
+    """Checks if a specified stock is presented in the portfolio"""
     return True if ticker in portfolio_tickers() else False
 
 
