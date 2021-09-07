@@ -225,6 +225,7 @@ def is_last_day_in_db(ticker):
 
 
 def get_last_close_price(ticker):
+    """Returns the last close price for the specified stock"""
     conn = sqlite_connect()
     cursor = conn.cursor()
     ticker_id = get_ticker_id(ticker, cursor)
