@@ -209,6 +209,7 @@ def db_save_day_quote_record(ticker, d, o, h, low, c):
 
 
 def is_last_day_in_db(ticker):
+    """Checks if DB contains data for the last available day"""
     sec_in_day = 86400
     today = int(datetime.datetime.now().timestamp() // 100 * 100)
     conn = sqlite_connect()
