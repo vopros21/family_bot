@@ -199,6 +199,7 @@ def db_read_portfolio():
 
 
 def db_save_day_quote_record(ticker, d, o, h, low, c):
+    """Save ticker prices' record into DB"""
     conn = sqlite_connect()
     cursor = conn.cursor()
     ticker_id = get_ticker_id(ticker, cursor)
