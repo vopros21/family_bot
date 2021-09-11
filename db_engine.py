@@ -189,6 +189,7 @@ def db_read_users(userid):
 
 # Read portfolio from DB
 def db_read_portfolio():
+    """Get whole portfolio from DB as a list of tuples"""
     connect = sqlite_connect()
     cursor = connect.cursor()
     cursor.execute('SELECT t.ticker, p.date, p.price, p.quantity '
