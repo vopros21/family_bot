@@ -180,6 +180,7 @@ def db_save_portfolio(user_text):
 
 # Read data from USERS
 def db_read_users(userid):
+    """Find user's name by id"""
     conn = sqlite_connect()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users WHERE id = ?', (userid, ))
