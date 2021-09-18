@@ -162,6 +162,7 @@ def get_ticker_id(ticker, cursor):
 
 # Add new data to portfolio db
 def db_save_portfolio(user_text):
+    """Add new row for portfolio in DB"""
     try:
         ticker, date, price, quantity = validate_user_input(user_text=user_text)
     except TypeError:
