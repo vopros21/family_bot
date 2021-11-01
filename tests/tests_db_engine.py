@@ -23,6 +23,11 @@ class TestValidateUserInput(unittest.TestCase):
         self.assertEqual(100.12, price, 'Price is not in correct format')
         self.assertEqual(2, quantity, 'Quantity is not in correct format')
 
+        # Validate negative quantity
+        user_input_3 = '/save ko 2021-06-01 50.0 -2'
+        negative_quantity = de.validate_user_input(user_text=user_input_3)[3]
+        self.assertEqual(negative_quantity, -2, 'Quantity is not in correct format')
+
     def test_wrong_argument_quantity(self):
         """Test if there is correct number of arguments in user's input"""
         user_input = ('/save aapl', '/save aapl 2021-06-01 100.12 2 45')

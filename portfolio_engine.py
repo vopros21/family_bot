@@ -34,6 +34,7 @@ def average_price(stock):
 
 
 # read the whole portfolio into a dictionary
+# TODO: update method to handle sold shares (negative quantity)
 def read_portfolio():
     """Get all stocks in the portfolio"""
     portfolio_dict = {}

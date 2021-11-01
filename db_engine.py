@@ -148,7 +148,7 @@ def validate_user_input(user_text):
         price = float(price)
 
     # check quantity format
-    if not re.match('^[0-9]+$', quantity):
+    if not re.match('^[-]*[0-9]+$', quantity):
         return None
     else:
         quantity = int(quantity)
