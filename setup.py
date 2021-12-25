@@ -2,12 +2,12 @@
 import os
 import telebot
 from telebot import types
+import glob
 
 # internal modules
 import quote_engine as qe
 import portfolio_engine as pe
 import db_engine as de
-import plot_engine as ple
 
 token = os.getenv('API_BOT_TOKEN')
 bot = telebot.TeleBot(token)
@@ -124,7 +124,10 @@ def command_quote_handler(message):
 def print_image(message):
     cid = message.chat.id
     _, *symbols = message.text.split()
-    image_path = ple.print_profit_loss(tickers=symbols)
+    folder_path = r'data/ple_images/*'
+    list_of_files = glob.glob(folder_path)
+    image_path = max(list_of_files, key=os.path.getctime)
+    print(image_path)
     bot.send_photo(chat_id=cid, photo=open(f'{image_path}', 'rb'))
 
 
