@@ -3,6 +3,8 @@ import os
 
 from aiogram import Bot, Dispatcher, executor, types
 
+from calendar_engine import get_next_event
+
 API_TOKEN = os.getenv('API_BOT_TOKEN')
 
 # Configure logging
@@ -35,6 +37,13 @@ async def cats(message: types.Message):
         '''
 
         await message.reply_photo(photo, caption='Cats are here 😺')
+
+
+@dp.message_handler(commands=['next'])
+async def get_next_calendar_event(message: types.Message):
+    a, b = get_next_event()
+    # TODO: call method what will sleep before event and send some message after awaking
+    await message.reply(a + b)
 
 
 @dp.message_handler()
