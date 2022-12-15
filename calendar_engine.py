@@ -43,7 +43,8 @@ def get_next_event():
         if not next_event:
             print('No upcoming events found.')
             return
-        start = next_event[0]['start'].get('dateTime', next_event[0]['start'].get('date'))
+        start = datetime.datetime.fromisoformat(
+            next_event[0]['start'].get('dateTime', next_event[0]['start'].get('date'))[:-1]).strftime("%B %d, %Y %H:%M")
         return start, next_event[0]['summary']
     except HttpError as error:
         print('An error occurred: %s' % error)

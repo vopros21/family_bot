@@ -43,7 +43,7 @@ async def cats(message: types.Message):
 async def get_next_calendar_event(message: types.Message):
     a, b = get_next_event()
     # TODO: call method what will sleep before event and send some message after awaking
-    await message.reply(a + b)
+    await message.reply(a + '\n' + b)
 
 
 @dp.message_handler()
