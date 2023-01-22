@@ -43,7 +43,7 @@ def save_user_stat(message):
 
 def manual(command):
     possible_answers = {
-        'save': 'Command format "/save yyyy-mm-dd value quantity"\n'
+        'save': 'Command format "/save ticker yyyy-mm-dd value quantity"\n'
                 'Where value is a fractional number (0.0), quantity is a whole number (0)',
         'quote': 'Command format "/quote" or "/quote ru".'
                  'Returns some quote in Russian or English (by default)',
@@ -68,7 +68,7 @@ def command_help_handler(message):
 @bot.message_handler(regexp='^.save')
 def command_save_helper(message):
     """ Method for adding new shares into portfolio
-        Query format "/save YYYY-MM-DD price quantity"
+        Query format "/save TICKER YYYY-MM-DD price quantity"
     """
     cid = message.chat.id
     manual_arg = 'save'
